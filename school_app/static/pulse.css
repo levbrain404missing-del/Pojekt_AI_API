@@ -1,0 +1,105 @@
+:root {
+  --bg:#101a18;
+  --panel:#182420;
+  --text:#eaf1e9;
+  --muted:#98aaa0;
+  --accent:#bce58e;
+  --button-text:#17231b;
+  --line:#304037;
+  --input-bg:#14201b;
+  --placeholder:#7e9587;
+  --art-bg:#213328;
+  --grid:#456349;
+  --sphere:radial-gradient(circle at 30% 22%,#e0f4b5,#acd67d 48%,#598a4f 90%);
+  --sphere-shadow:0 0 60px #acd67d15,inset -6px -10px 20px #45674655;
+  --sphere-text:#294a2e;
+  --ring:#8aaa66;
+  --float-bg:#263b2aef;
+  --tab-active:#314331;
+  --panel-shadow:none;
+  --error-bg:#382626;
+  --error-text:#f3b4ad;
+  --error-border:#614039;
+}
+
+.pulse .brand {
+  letter-spacing:-.7px;
+}
+
+.pulse .intro h1 {
+  font-family:Georgia,'Times New Roman',serif;
+  font-weight:400;
+  font-size:61px;
+  letter-spacing:-2px;
+  line-height:1.02;
+}
+
+.pulse .form-panel {
+  border-radius:4px;
+}
+
+.pulse .visual-card {
+  border-radius:4px;
+}
+
+.pulse .planet {
+  border-radius:30% 60% 38% 60%;
+  transform:rotate(-15deg);
+}
+
+.pulse .planet span {
+  transform:rotate(15deg);
+}
+
+.pulse .ring-one {
+  transform:rotate(-42deg);
+  width:280px;
+  left:calc(50% - 140px);
+}
+
+.pulse .ring-two {
+  transform:rotate(42deg);
+}
+
+.pulse .small-star {
+  font-size:25px;
+}
+
+.pulse .primary-button {
+  border-radius:4px;
+}
+
+.pulse .quota-card,.pulse .conversation {
+  border-radius:6px;
+}
+
+.pulse .empty-chat h2 {
+  font-family:Georgia,'Times New Roman',serif;
+  font-weight:400;
+  font-size:34px;
+}
+
+.pulse .chat-sidebar h1 {
+  font-family:Georgia,'Times New Roman',serif;
+  font-weight:400;
+  font-size:40px;
+}
+
+@media(max-width:1050px) {
+  .pulse .intro h1 {
+    font-size:50px;
+  }
+}
+
+@media(max-width:740px) {
+  .pulse .intro h1 {
+    font-size:44px;
+  }
+  .pulse .empty-chat h2 {
+    font-size:29px;
+  }
+  .pulse .chat-sidebar h1 {
+    font-size:33px;
+  }
+}
+

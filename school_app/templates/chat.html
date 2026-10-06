@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Твои вопросы · {{ brand }}{% endblock %}
+{% block content %}
+<main class="chat-layout">
+  <aside class="chat-sidebar"><p class="eyebrow">ЛИЧНОЕ ПРОСТРАНСТВО</p><h1>Привет,<br>{{ g.user.username }}<span class="accent">.</span></h1><p>О чём хочешь узнать сегодня?</p>
+    <div class="quota-card"><div class="quota-title"><span>Доступные вопросы</span><span aria-hidden="true">✦</span></div><p class="quota-number">{{ remaining if remaining is not none else '—' }}<span> / 4</span></p><div class="quota-bars" aria-hidden="true">{% for i in range(4) %}<span class="{{ 'filled' if remaining is not none and i < remaining }}"></span>{% endfor %}</div><p>Общий лимит демонстрации. После четырёх запросов доступ возобновляет владелец проекта.</p></div>
+    <div class="sidebar-note"><span>✧</span><p>Хороший вопрос —<br>половина открытия.</p></div>
+  </aside>
+  <section class="conversation"><header class="conversation-header"><div><span class="assistant-avatar">{{ '◉' if theme == 'orbit' else '✳' }}</span><div><h2>{{ brand }} AI</h2><p>Учебный помощник · Mistral AI</p></div></div><span class="connection-tag">{{ 'Доступ завершён' if remaining == 0 else 'Твои открытия' }}</span></header>
+    <div class="message-list">
+    {% if messages %}{% for item in messages %}<article class="message user-message"><p class="message-author">ТЫ <span>{{ item.created_at[:16] }} UTC</span></p><div class="message-text">{{ item.prompt }}</div></article><article class="message assistant-message"><p class="message-author">✦ {{ brand|upper }} AI</p><div class="message-text">{{ item.answer }}</div></article>{% endfor %}
+    {% else %}<div class="empty-chat"><div class="empty-symbol" aria-hidden="true">✦</div><p class="eyebrow">ВСЁ НАЧИНАЕТСЯ С ЛЮБОПЫТСТВА</p><h2>Какой будет твой<br>первый вопрос?</h2><p>Сложная тема, новая идея или просто «а почему?» —<br>давай разберёмся вместе.</p><div class="prompt-ideas"><div><span>01 / ПОНЯТЬ</span>Объясни, как работает<br>искусственный интеллект</div><div><span>02 / ПРИДУМАТЬ</span>Предложи идею<br>для школьного проекта</div></div></div>{% endif %}
+    </div>
+    {% if unavailable %}<p class="notice error">{{ unavailable }}</p>{% endif %}
+    {% if remaining == 0 %}<div class="locked-message"><b>Четыре вопроса — четыре открытия.</b><p>Лимит исчерпан. История останется здесь. Новые запросы сможет разрешить только владелец проекта.</p></div>{% else %}<form method="post" action="{{ url_for('chat') }}" class="composer"><input type="hidden" name="csrf" value="{{ session.csrf }}"><input type="hidden" name="request_id" value="{{ session.chat_request_id }}"><label for="prompt">Твой вопрос</label><textarea id="prompt" name="prompt" placeholder="Спроси о том, что тебе интересно…" maxlength="2000" rows="3" required {% if unavailable %}disabled{% endif %}></textarea><div class="composer-bottom"><span>До 2 000 символов · Ответ появится после отправки</span><button class="primary-button" type="submit" {% if unavailable %}disabled{% endif %}>Отправить <span>↗</span></button></div></form>{% endif %}
+    <p class="ai-note">Нейросеть может ошибаться. Проверяй важные факты.</p>
+  </section>
+</main>
+{% endblock %}

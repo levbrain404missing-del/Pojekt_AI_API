@@ -39,4 +39,3 @@ GitHub хранит код, но не запускает Flask как серве
 - `school_app/static` — оформление.
 
 Репозиторий: https://github.com/levbrain404missing-del/Pojekt_AI_API
-

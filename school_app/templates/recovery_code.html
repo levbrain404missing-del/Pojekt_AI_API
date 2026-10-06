@@ -1,0 +1,4 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="center-stage"><section class="success-card"><div class="success-icon">✓</div><p class="eyebrow">{{ 'ДОСТУП ВОССТАНОВЛЕН' if recovered else 'АККАУНТ ГОТОВ' }}</p><h1>Сохрани этот код</h1><p>Он поможет сменить пароль, если ты его забудешь. Код показывается только сейчас. Сохрани его в надёжном месте.</p><div class="recovery-code">{{ code }}</div><p class="muted">{{ 'Старый код больше не работает. ' if recovered else '' }}Не передавай этот код другим людям: он открывает доступ к аккаунту.</p><a class="primary-button" href="{{ url_for('login') if recovered else url_for('chat') }}">{{ 'Перейти ко входу' if recovered else 'Перейти к вопросам' }} <span>↗</span></a></section></main>
+{% endblock %}

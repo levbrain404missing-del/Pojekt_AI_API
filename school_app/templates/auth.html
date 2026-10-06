@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% set titles = {'register': 'Начнём знакомство', 'login': 'С возвращением', 'forgot': 'Забыли пароль?', 'reset': 'Новый пароль', 'recover': 'Восстановить доступ'} %}
+{% block title %}{{ titles[mode] }} · {{ brand }}{% endblock %}
+{% block content %}
+<main class="auth-layout">
+  <section class="intro">
+    <p class="eyebrow"><span class="status-dot"></span> ТВОЙ ИИ-ПОМОЩНИК</p>
+    <h1>{{ tagline }}</h1>
+    <p class="intro-description">{{ description }}</p>
+    <div class="visual-card" aria-hidden="true">
+      <div class="visual-grid"></div><div class="ring ring-one"></div><div class="ring ring-two"></div><div class="planet"><span>{{ '✦' if theme == 'orbit' else '✳' }}</span></div>
+      <div class="floating-label label-top"><span>✧</span> Место, где рождаются идеи</div>
+      <div class="floating-label label-bottom"><span class="mini-dot"></span> Один вопрос. Новое открытие.</div>
+      <span class="visual-coordinate">{{ '01 / EXPLORE' if theme == 'orbit' else '02 / DISCOVER' }}</span>
+    </div>
+    <div class="benefits"><span><b>01</b> Спроси</span><span><b>02</b> Разберись</span><span><b>03</b> Вдохновись</span></div>
+  </section>
+  <section class="form-panel">
+    {% if mode in ['register', 'login'] %}<nav class="auth-tabs" aria-label="Аккаунт"><a href="{{ url_for('registration') }}" class="{{ 'active' if mode == 'register' }}">Регистрация</a><a href="{{ url_for('login') }}" class="{{ 'active' if mode == 'login' }}">Вход</a></nav>{% else %}<a class="back-link" href="{{ url_for('login') }}">← Вернуться ко входу</a>{% endif %}
+    <div class="form-heading"><span class="small-star" aria-hidden="true">✦</span><h2>{{ titles[mode] }}</h2>
+    <p>{% if mode == 'register' %}Создай аккаунт — и переходи от вопросов к открытиям.{% elif mode == 'login' %}Твои вопросы и открытия уже ждут тебя.{% elif mode == 'forgot' %}Пришлём на почту ссылку для смены пароля.{% elif mode == 'reset' %}Придумай новый пароль для своего аккаунта.{% else %}Введи код, который ты сохранил при регистрации.{% endif %}</p></div>
+    <form method="post" action="{{ url_for('user_register') if mode == 'register' else request.path }}" class="auth-form">
+      <input type="hidden" name="csrf" value="{{ session.csrf }}">
+      {% if mode == 'register' %}<label for="fullname">Как тебя зовут?</label><input id="fullname" name="fullname" placeholder="Твоё имя" autocomplete="name" minlength="2" maxlength="60" value="{{ request.form.get('fullname','') }}" required>{% endif %}
+      {% if mode != 'reset' %}<label for="email">Электронная почта</label><input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" maxlength="254" value="{{ request.form.get('email','') }}" required>{% endif %}
+      {% if mode == 'recover' %}<label for="recovery_code">Резервный код</label><input id="recovery_code" name="recovery_code" placeholder="XXXXXX-XXXXXX-XXXXXX-XXXXXX" autocomplete="off" required>{% endif %}
+      {% if mode != 'forgot' %}<div class="label-row"><label for="password">{{ 'Новый пароль' if mode in ['reset','recover'] else 'Пароль' }}</label>{% if mode == 'login' %}<a href="{{ url_for('forgot_password') }}">Забыли пароль?</a>{% endif %}</div><input type="password" id="password" name="password" placeholder="{{ 'Твой пароль' if mode == 'login' else 'Не менее 8 символов' }}" autocomplete="{{ 'current-password' if mode == 'login' else 'new-password' }}" minlength="{{ 1 if mode == 'login' else 8 }}" maxlength="128" required>{% endif %}
+      {% if mode in ['register','reset','recover'] %}<label for="confirm_password">Повтори пароль</label><input type="password" id="confirm_password" name="confirm_password" placeholder="Ещё раз, чтобы не ошибиться" autocomplete="new-password" minlength="8" maxlength="128" required>{% endif %}
+      <button class="primary-button" type="submit" {% if mode == 'forgot' and not smtp_ready %}disabled{% endif %}>{{ {'register':'Создать аккаунт','login':'Войти','forgot':'Отправить ссылку','reset':'Сохранить пароль','recover':'Восстановить доступ'}[mode] }} <span aria-hidden="true">↗</span></button>
+    </form>
+    {% if mode == 'register' %}<p class="form-note"><span aria-hidden="true">◇</span> Пароль хранится в виде защищённого хеша</p>{% elif mode == 'forgot' %}{% if not smtp_ready %}<p class="form-note">Отправка писем пока не настроена. Доступ можно восстановить по резервному коду.</p>{% endif %}<a class="secondary-link" href="{{ url_for('recover') }}">Восстановить по резервному коду →</a>{% elif mode == 'login' %}<p class="form-note">Первый раз здесь? <a href="{{ url_for('registration') }}">Создать аккаунт</a></p>{% endif %}
+  </section>
+</main>
+{% endblock %}

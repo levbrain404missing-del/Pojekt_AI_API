@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="{{ '#f5f6fa' if theme == 'orbit' else '#101a18' }}">
+  <title>{% block title %}{{ brand }} — учебный помощник{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename=theme + '.css') }}">
+</head>
+<body class="{{ theme }}">
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="{{ url_for('registration') }}"><span class="brand-symbol" aria-hidden="true">{{ '◉' if theme == 'orbit' else '✳' }}</span>{{ brand }}<span class="brand-dot">.</span></a>
+      <span class="header-caption">ПРОСТРАНСТВО ДЛЯ ВОПРОСОВ</span>
+      {% if g.user %}
+      <form action="{{ url_for('logout') }}" method="post" class="logout"><input type="hidden" name="csrf" value="{{ session.csrf }}"><span class="user-name">{{ g.user.username }}</span><button class="text-button" type="submit">Выйти ↗</button></form>
+      {% else %}<a class="header-link" href="{{ url_for('login') }}">Войти в аккаунт <span aria-hidden="true">↗</span></a>{% endif %}
+    </header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}<div class="notifications" role="status">{% for category, message in messages %}<p class="notice {{ category }}">{{ message }}</p>{% endfor %}</div>{% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+    <footer class="site-footer"><span>{{ brand }} · Учебный проект, 2026</span><span>Создано для любопытных <span aria-hidden="true">✦</span></span></footer>
+  </div>
+</body>
+</html>
